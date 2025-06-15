@@ -18,8 +18,8 @@
                 <textarea v-model="content" class="form-control" id="content" rows="3"></textarea>
             </div>
             <div class="mb-3">
-            <label for="image" class="form-label">Image</label>
-            <input type="file" @change="handleFileChange" class="form-control" id="image" accept="image/*" />
+                <label for="image" class="form-label">Image</label>
+                <input v-model="image_url" type="text" class="form-control" id="image" placeholder="Image_url" required />
             </div>
             <input class="btn btn-primary" type="submit" value="Submit">
         </form>
@@ -31,39 +31,28 @@
     import { ref } from 'vue'
     import axios from 'axios'
     import { useStore } from '../../Store/store.js';
+    import { useRoute, useRouter } from 'vue-router'
 
+    const route = useRoute()
+    const router = useRouter()
     const store = useStore(); 
     const menuCategory = store.categories;
 
     const title = ref('')
     const category = ref('')
     const content = ref('')
-    const image = ref(null)
-
-    const handleFileChange = (event) => {
-        image.value = event.target.files[0]
-    }
+    const image_url = ref('')
 
     const submitForm = async () => {
         try {
-            const formData = new FormData()
-            formData.append('title', title.value)
-            formData.append('category', category.value)
-            formData.append('content', content.value)
-            formData.append('image', image.value)
-
-            console.log("FormData gửi đi:", formData)
-
-            await axios.post('http://localhost:8000/api/blogs', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+            await axios.post('http://localhost:8000/api/create_blog', {
+                title: title.value,
+                category: category.value,
+                content: content.value,
+                image_url: image_url.value
             })
             alert('Gửi thành công!')
-            title.value = ''
-            category.value = ''
-            content.value = ''
-            image.value = null
+            router.push('/home')
         } catch (error) {
             alert('Lỗi gửi!')
             console.error(error)

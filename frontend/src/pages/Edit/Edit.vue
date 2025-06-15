@@ -22,10 +22,10 @@
 
         <div class="mb-3">
           <label for="image" class="form-label">Image </label>
-          <input type="file" @change="handleFileChange" class="form-control" id="image" accept="image/*" />
+          <input v-model="image_url" type="text" class="form-control" id="image" placeholder="Image url" required />
         </div>
 
-        <input class="btn btn-primary" type="submit" value="Cập nhật">
+        <input class="btn btn-primary" type="submit" value="Update">
       </form>
     </div>
   </div>
@@ -45,7 +45,7 @@ const menuCategory = store.categories
 const title = ref('')
 const category = ref('')
 const content = ref('')
-const image = ref(null)
+const image_url = ref('')
 
 const blogId = route.params.id
 
@@ -57,6 +57,7 @@ onMounted(async () => {
     title.value = blog.title
     category.value = blog.category
     content.value = blog.content
+    image_url.value = blog.image_url
     
   } catch (err) {
     alert('Không tìm thấy blog')
@@ -64,28 +65,15 @@ onMounted(async () => {
   }
 })
 
-const handleFileChange = (event) => {
-  image.value = event.target.files[0]
-}
 
 const submitForm = async () => {
   try {
-    const formData = new FormData()
-    formData.append('title', title.value)
-    formData.append('category', category.value)
-    formData.append('content', content.value)
-
-    if (image.value) {
-      formData.append('image', image.value)
-    }
-
-    await axios.post(
-      `http://localhost:8000/api/blogs/${blogId}?_method=PUT`,
-      formData,
-      {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      }
-    )
+    await axios.put(`http://localhost:8000/api/update/${blogId}`, {
+      title: title.value,
+      category: category.value,
+      content: content.value,
+      image_url: image_url.value      
+    })
 
     alert('Cập nhật thành công!')
     router.push('/manage')

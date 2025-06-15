@@ -14,7 +14,7 @@
             style="cursor: pointer;"
           >
             <img
-              :src="`http://localhost:8000/storage/${blog.image_url}`"
+              :src="blog.image_url"
               alt="Blog Image"
               class="card-img-top"
               style="height: 200px; object-fit: cover;"
