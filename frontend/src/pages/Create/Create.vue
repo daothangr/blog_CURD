@@ -52,7 +52,7 @@
                 image_url: image_url.value
             })
             alert('Gửi thành công!')
-            router.push('/home')
+            router.push('/')
         } catch (error) {
             alert('Lỗi gửi!')
             console.error(error)

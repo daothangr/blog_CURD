@@ -9,7 +9,7 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         <div class="col" v-for="blog in blogs" :key="blog.id">
           <div 
-            class="card h-100 shadow-sm d-flex flex-column justify-content-between"
+            class="card h-100 shadow-sm d-flex flex-column justify-content-between "
             @click="$router.push({ name: 'BlogDetail', params: { id: blog.id } })"
             style="cursor: pointer;"
           >
@@ -67,3 +67,14 @@ onMounted(async () => {
   }
 })
 </script> 
+
+<style scoped>
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+} 
+</style>

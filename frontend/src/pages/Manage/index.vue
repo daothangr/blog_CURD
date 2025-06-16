@@ -13,7 +13,7 @@
     <li v-for="blog in blogs" :key="blog.id" class="list-item">
         <div class="item-content">
         <h4 class="item-title">{{ blog.title }}</h4>
-        <p class="item-description">{{ formatDate(blog.datetime) }}</p>
+        <p class="item-description">Updated: {{ formatDate(blog.updated_at) }}</p>
         </div>
         <div class="action-buttons">
             <router-link :to="'/edit/' + blog.id">
@@ -41,20 +41,23 @@
     const loading = ref(true)
 
     const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' }
-    return new Date(dateString).toLocaleDateString('vi-VN', options)
+        const date = new Date(dateString)
+        const day = String(date.getDate()).padStart(2, '0')
+        const month = String(date.getMonth() + 1).padStart(2, '0') 
+        const year = date.getFullYear()
+        return `${day}/${month}/${year}`
     }
 
 
     onMounted(async () => {
-    try {
-        const res = await axios.get('http://localhost:8000/api/blogs')
-        blogs.value = res.data
-    } catch (err) {
-        console.error('Error:', err)
-    } finally {
-        loading.value = false
-    }
+        try {
+            const res = await axios.get('http://localhost:8000/api/blogs')
+            blogs.value = res.data
+        } catch (err) {
+            console.error('Error:', err)
+        } finally {
+            loading.value = false
+        }
     })
 
     const deleteBlog = async (id) => {
@@ -147,9 +150,7 @@
     min-width: 0; 
     }
 
-    .list-item:hover {
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
-    }
+
 
     .item-title {
     font-weight: 600;
